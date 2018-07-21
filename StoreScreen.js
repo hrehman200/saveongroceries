@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View, ListView} from 'react-native';
 import SQLite from 'react-native-sqlite-storage';
 
+const DB_NAME = 'savongroceries.db';
 let db;
 
 class StoreScreen extends Component {
@@ -55,7 +56,7 @@ class StoreScreen extends Component {
     }
 
     loadAndQueryDB = () => {
-        db = SQLite.openDatabase({name : "savongroceries.db", createFromLocation : 1}, this.okCallback, this.errorCallback);
+        db = SQLite.openDatabase({name : DB_NAME, createFromLocation : 1}, this.okCallback, this.errorCallback);
         db.transaction(this.queryStores, this.errorCallback,() => {
             this.updateProgress("Processing completed");
         });
@@ -82,7 +83,7 @@ class StoreScreen extends Component {
 
     deleteDatabase = () => {
         this.updateProgress("Deleting database");
-        SQLite.deleteDatabase(database_name, this.deleteCallback, this.errorCallback);
+        SQLite.deleteDatabase(DB_NAME, this.deleteCallback, this.errorCallback);
     }
 
     runDemo = () => {
