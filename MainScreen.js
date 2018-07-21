@@ -11,15 +11,21 @@ class MainScreen extends Component {
         this.props.navigation.navigate('Stores');
     }
 
+    gotoCameraScreen = () => {
+        this.props.navigation.navigate('CameraScreen');
+    }
+
+    gotoBarcodeScreen = () => {
+        this.props.navigation.navigate('BarcodeScreen');
+    }
+
     render() {
         return(
             <View style = { styles.container }>
-                <Text style = { styles.text }>
-                    First Screen.
-                </Text>
-
                 <View style = { styles.buttonHolder }>
                     <Button style = { styles.button } onPress = { this.gotoStoreScreen } title = 'Select Store'/>
+                    <Button style = { styles.button } onPress = { this.gotoCameraScreen } title = 'Take Product Picture'/>
+                    <Button style = { styles.button } onPress = { this.gotoBarcodeScreen } title = 'Scan Barcode'/>
                 </View>
             </View>
         );
@@ -38,7 +44,12 @@ const styles = StyleSheet.create({
         color: 'black'
     },
     buttonHolder: {
-        paddingTop: 25
+        paddingTop: 0
+    },
+    button: {
+        backgroundColor: '#1279C9',
+        color: 'white',
+        fontSize: 22
     }
 });
 
