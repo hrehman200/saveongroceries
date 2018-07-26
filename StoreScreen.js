@@ -58,7 +58,7 @@ class StoreScreen extends Component {
     loadAndQueryDB = () => {
         db = SQLite.openDatabase({name : DB_NAME, createFromLocation : 1}, this.okCallback, this.errorCallback);
         db.transaction(this.queryStores, this.errorCallback,() => {
-            this.updateProgress("Processing completed");
+
         });
     }
 
@@ -67,7 +67,6 @@ class StoreScreen extends Component {
     }
 
     queryStoresSuccess = (tx,results) => {
-        this.updateProgress("Query completed");
         console.log(results.rows);
         for (let i = 0; i < results.rows.length; i++) {
             let row = results.rows.item(i);
