@@ -34,6 +34,10 @@ class StoreScreen extends Component {
         });
     }
 
+    componentWillMount = () => {
+        this.loadAndQueryDB();
+    }
+
     componentWillUnmount = () => {
         this.closeDatabase();
     }
@@ -85,10 +89,6 @@ class StoreScreen extends Component {
         SQLite.deleteDatabase(DB_NAME, this.deleteCallback, this.errorCallback);
     }
 
-    runDemo = () => {
-        this.loadAndQueryDB();
-    }
-
     renderProgressEntry = (entry) => {
         return (<View style={listStyles.li}>
             <View>
@@ -99,17 +99,6 @@ class StoreScreen extends Component {
 
     render = () => {
         return (<View style={styles.mainContainer}>
-            <View style={styles.toolbar}>
-                <Text style={styles.toolbarButton} onPress={this.runDemo}>
-                    Run Demo
-                </Text>
-                <Text style={styles.toolbarButton} onPress={this.closeDatabase}>
-                    Close DB
-                </Text>
-                <Text style={styles.toolbarButton} onPress={this.deleteDatabase}>
-                    Delete DB
-                </Text>
-            </View>
             <ListView
                 enableEmptySections={true}
                 dataSource={this.state.ds.cloneWithRows(this.state.progress)}
@@ -160,17 +149,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: '#333333',
         marginBottom: 5,
-    },
-    toolbar: {
-        backgroundColor: '#51c04d',
-        paddingTop: 30,
-        paddingBottom: 10,
-        flexDirection: 'row'
-    },
-    toolbarButton: {
-        color: 'blue',
-        textAlign: 'center',
-        flex: 1
     },
     mainContainer: {
         flex: 1
