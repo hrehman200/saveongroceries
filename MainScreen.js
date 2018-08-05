@@ -78,10 +78,11 @@ const styles = StyleSheet.create({
         marginBottom:50
     },
     buttonHolder: {
-        paddingTop: 0
+        paddingTop: 0,
+        backgroundColor: 'transparent',
     },
     button: {
-        marginBottom: 16,
+        marginBottom: 13,
         backgroundColor: "#159588"
     }
 });

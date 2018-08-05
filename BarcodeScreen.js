@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, Dimensions} from 'react-native';
+import {Platform, StyleSheet, Text, View, Dimensions, AsyncStorage} from 'react-native';
 
 import Camera from 'react-native-camera';
 
@@ -12,11 +12,36 @@ class BarcodeScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            qrcode: ''
         }
     }
 
-    onBarCodeRead = (e) => this.setState({qrcode: e.data});
+    async saveKey (key, value) {
+        try {
+            await AsyncStorage.setItem(key, JSON.stringify(value));
+        } catch (error) {
+            // Error saving data
+        }
+    }
+
+    async getKey (key) {
+        try {
+            const value = await AsyncStorage.getItem(key);
+            if (value !== null) {
+                console.log(value);
+            }
+        } catch (error) {
+            // Error retrieving data
+        }
+    }
+
+    saveAndGoToReviewScreen = (data) => {
+        this.saveKey('product_sku', data);
+        this.props.navigation.navigate('ReviewScreen');
+    }
+
+    onBarCodeRead = (e) => {
+        this.saveAndGoToReviewScreen(e.data);
+    }
 
     render() {
         return (

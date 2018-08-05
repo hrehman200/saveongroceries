@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, ListView} from 'react-native';
+import {Platform, StyleSheet, Text, View, ListView, AsyncStorage} from 'react-native';
 import SQLite from 'react-native-sqlite-storage';
 
 const DB_NAME = 'savongroceries.db';
@@ -44,7 +44,6 @@ class StoreScreen extends Component {
 
     errorCallback = (err) => {
         console.log(err);
-        this.updateProgress(err.response);
     }
 
     okCallback = () => {
@@ -53,10 +52,6 @@ class StoreScreen extends Component {
 
     closeCallback = () => {
         console.log('Db closed');
-    }
-
-    deleteCallback = () => {
-        this.updateProgress("Database DELETED");
     }
 
     loadAndQueryDB = () => {
@@ -74,7 +69,7 @@ class StoreScreen extends Component {
         console.log(results.rows);
         for (let i = 0; i < results.rows.length; i++) {
             let row = results.rows.item(i);
-            this.updateProgress(`Store Name: ${row.name}, ID: ${row.id}`);
+            this.updateProgress(row);
         }
     }
 
@@ -85,14 +80,41 @@ class StoreScreen extends Component {
     }
 
     deleteDatabase = () => {
-        this.updateProgress("Deleting database");
         SQLite.deleteDatabase(DB_NAME, this.deleteCallback, this.errorCallback);
     }
 
+    async saveKey (key, value) {
+        try {
+            await AsyncStorage.setItem(key, JSON.stringify(value));
+        } catch (error) {
+            // Error saving data
+        }
+    }
+
+    async getKey (key) {
+        try {
+            const value = await AsyncStorage.getItem(key);
+            if (value !== null) {
+                console.log(value);
+            }
+        } catch (error) {
+            // Error retrieving data
+        }
+    }
+
+    saveAndGoBack = (row) => {
+        console.log(row);
+        this.saveKey('store', row);
+        //this.props.navigation.goBack();
+        this.props.navigation.navigate('ReviewScreen');
+    }
+
     renderProgressEntry = (entry) => {
-        return (<View style={listStyles.li}>
+        return (<View style={listStyles.li} >
             <View>
-                <Text style={listStyles.liText}>{entry}</Text>
+                <Text onPress={this.saveAndGoBack.bind(this, entry)} style={listStyles.liText}>
+                    {entry.name}
+                </Text>
             </View>
         </View>)
     }
